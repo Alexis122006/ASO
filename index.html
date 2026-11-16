@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Estante Clásico | Guía para leer libros clásicos</title>
+<meta name="description" content="Guía sencilla para acercarse a los libros clásicos: qué son, obras para empezar y soluciones a los problemas más comunes al leerlos.">
+<style>
+:root{
+  --tinta:#1d2b27;
+  --verde:#24433a;
+  --verde-2:#34594e;
+  --latón:#b48a3c;
+  --papel:#eef0ea;
+  --hoja:#fbfbf7;
+  --burdeos:#6e2a35;
+  --azul:#2c3e5c;
+  --gris:#5b6661;
+  --serif:Georgia,"Palatino Linotype",Palatino,"Book Antiqua",serif;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);background:var(--papel);color:var(--tinta);line-height:1.7;font-size:1.05rem}
+a{color:inherit}
+
+/* Controles del menú (ocultos, pero accesibles con teclado) */
+.control{position:absolute;opacity:0;pointer-events:none}
+
+/* Cabecera */
+header{background:var(--verde);color:#f3efe2;padding:2.5rem 1.25rem 0}
+.cabecera{max-width:62rem;margin:0 auto}
+header h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;font-weight:normal;letter-spacing:.01em}
+header p.lema{max-width:36rem;margin-top:.6rem;color:#d4dccf;font-size:1.1rem}
+
+/* Menú en forma de lomos de libro */
+nav{max-width:62rem;margin:2rem auto 0;display:flex;align-items:flex-end;gap:.4rem;padding:0 .25rem}
+nav label{
+  flex:1 1 0;max-width:15rem;cursor:pointer;color:#fff;font-family:var(--sans);font-size:.95rem;
+  padding:1rem .9rem .8rem;border-radius:.45rem .45rem 0 0;text-align:center;
+  border-top:4px solid var(--latón);
+  transition:transform .25s ease,filter .2s ease;
+  min-height:3.6rem;display:flex;align-items:center;justify-content:center;
+}
+nav label:nth-child(1){background:var(--burdeos);min-height:4.4rem}
+nav label:nth-child(2){background:var(--azul);min-height:3.9rem}
+nav label:nth-child(3){background:#4d5a2e;min-height:4.6rem}
+nav label:nth-child(4){background:#5b3a63;min-height:4.1rem}
+nav label:hover{transform:translateY(-6px);filter:brightness(1.12)}
+
+/* Pestaña activa: el libro "sale" del estante */
+#m1:checked ~ header label[for="m1"],
+#m2:checked ~ header label[for="m2"],
+#m3:checked ~ header label[for="m3"],
+#m4:checked ~ header label[for="m4"]{
+  transform:translateY(-12px);background:var(--hoja);color:var(--tinta);font-weight:600;
+  border-top-color:var(--latón);
+}
+/* Foco visible con teclado */
+#m1:focus-visible ~ header label[for="m1"],
+#m2:focus-visible ~ header label[for="m2"],
+#m3:focus-visible ~ header label[for="m3"],
+#m4:focus-visible ~ header label[for="m4"]{outline:3px solid var(--latón);outline-offset:3px}
+
+/* Paneles */
+main{max-width:62rem;margin:0 auto;padding:2.5rem 1.25rem 3.5rem;min-height:30rem}
+.panel{display:none}
+#m1:checked ~ main #inicio,
+#m2:checked ~ main #basica,
+#m3:checked ~ main #obras,
+#m4:checked ~ main #problemas{display:block;animation:entra .35s ease}
+@keyframes entra{from{opacity:0}to{opacity:1}}
+
+h2{font-size:clamp(1.6rem,3.5vw,2.1rem);font-weight:normal;line-height:1.25;margin-bottom:1rem;color:var(--verde)}
+h3{font-size:1.2rem;font-weight:bold;margin-bottom:.35rem}
+p{max-width:44rem;margin-bottom:1rem}
+
+/* Inicio */
+.portada{display:grid;grid-template-columns:1.4fr 1fr;gap:2.5rem;align-items:start}
+.cita{background:var(--hoja);border-left:5px solid var(--latón);padding:1.5rem 1.5rem 1.25rem;font-style:italic}
+.cita small{display:block;margin-top:.8rem;font-style:normal;font-family:var(--sans);color:var(--gris);font-size:.85rem}
+.cita p{margin-bottom:0}
+.atajos{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.4rem}
+.atajos label{
+  font-family:var(--sans);font-size:.95rem;cursor:pointer;background:var(--verde);color:#fff;
+  padding:.65rem 1.1rem;border-radius:.3rem;transition:background .2s;
+}
+.atajos label:hover{background:var(--verde-2)}
+
+/* Información básica */
+.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:2rem 2.5rem;margin-top:1.5rem}
+.dos section{border-top:2px solid var(--verde);padding-top:.8rem}
+.dos p{margin-bottom:0}
+dl{max-width:44rem;margin-top:2rem;background:var(--hoja);padding:1.2rem 1.5rem}
+dt{font-weight:bold;margin-top:.8rem}
+dt:first-child{margin-top:0}
+dd{color:var(--gris)}
+
+/* Obras */
+.estante{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:1.4rem;margin-top:1.5rem}
+.libro{background:var(--hoja);padding:1.2rem 1.2rem 1.1rem;border-left:10px solid var(--burdeos)}
+.libro:nth-child(2){border-left-color:var(--azul)}
+.libro:nth-child(3){border-left-color:#4d5a2e}
+.libro:nth-child(4){border-left-color:#5b3a63}
+.libro:nth-child(5){border-left-color:var(--latón)}
+.libro:nth-child(6){border-left-color:var(--verde)}
+.libro .autor{font-family:var(--sans);font-size:.88rem;color:var(--gris);margin-bottom:.6rem}
+.libro p{font-size:.98rem;margin-bottom:.6rem;line-height:1.6}
+.libro .nivel{font-family:var(--sans);font-size:.85rem;margin-bottom:0;color:var(--tinta)}
+
+/* Problemas y soluciones (acordeón sin JavaScript) */
+.lista-problemas{margin-top:1.5rem;max-width:48rem}
+details{background:var(--hoja);margin-bottom:.7rem;border-left:5px solid var(--latón)}
+summary{cursor:pointer;padding:1rem 1.2rem;font-weight:bold;list-style:none;display:flex;justify-content:space-between;gap:1rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--sans);font-size:1.4rem;line-height:1;color:var(--verde);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+summary:hover{background:#f1f2ea}
+summary:focus-visible{outline:3px solid var(--latón);outline-offset:-3px}
+details .solucion{padding:.2rem 1.2rem 1.1rem}
+details .solucion p{margin-bottom:.6rem}
+details .solucion strong{color:var(--verde)}
+
+/* Footer */
+footer{background:var(--tinta);color:#dfe4dc;padding:2.5rem 1.25rem 1.5rem}
+.pie{max-width:62rem;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:2rem}
+footer h4{font-weight:normal;font-size:1.15rem;color:#fff;margin-bottom:.6rem}
+footer p,footer li{font-family:var(--sans);font-size:.93rem;line-height:1.7;margin-bottom:.3rem;max-width:none}
+footer ul{list-style:none}
+footer a{text-decoration:none;border-bottom:1px solid var(--latón)}
+footer a:hover{color:#fff}
+.derechos{max-width:62rem;margin:2rem auto 0;padding-top:1rem;border-top:1px solid #3d4b46;font-family:var(--sans);font-size:.85rem;color:#a9b3ac}
+
+/* Pantallas pequeñas */
+@media (max-width:720px){
+  .portada{grid-template-columns:1fr}
+  nav{gap:.25rem}
+  nav label{font-size:.8rem;padding:.7rem .3rem .6rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Controles del menú -->
+<input class="control" type="radio" name="menu" id="m1" checked aria-label="Inicio">
+<input class="control" type="radio" name="menu" id="m2" aria-label="Información básica">
+<input class="control" type="radio" name="menu" id="m3" aria-label="Obras para empezar">
+<input class="control" type="radio" name="menu" id="m4" aria-label="Problemas y soluciones">
+
+<header>
+  <div class="cabecera">
+    <h1>El Estante Clásico</h1>
+    <p class="lema">Una guía sencilla para leer los libros que han durado siglos, sin miedo y a tu ritmo.</p>
+    <nav aria-label="Menú principal">
+      <label for="m1">Inicio</label>
+      <label for="m2">Información básica</label>
+      <label for="m3">Obras para empezar</label>
+      <label for="m4">Problemas y soluciones</label>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- INICIO -->
+  <article class="panel" id="inicio">
+    <div class="portada">
+      <div>
+        <h2>Los clásicos no muerden</h2>
+        <p>Mucha gente piensa que leer a Cervantes, Dostoyevski o Jane Austen exige estudios especiales. No es cierto. Son libros que sobrevivieron porque tratan de cosas que no caducan: el amor, la ambición, la culpa, la locura, la amistad.</p>
+        <p>Esta página reúne lo básico para empezar, una lista corta de obras con las que arrancar y respuestas a los tropiezos más comunes, como el lenguaje antiguo o la extensión.</p>
+        <div class="atajos">
+          <label for="m2">Qué es un clásico</label>
+          <label for="m3">Ver obras</label>
+          <label for="m4">Resolver un problema</label>
+        </div>
+      </div>
+      <blockquote class="cita">
+        <p>Un clásico es un libro que nunca termina de decir lo que tiene que decir.</p>
+        <small>Idea de Italo Calvino, en su ensayo «Por qué leer a los clásicos»</small>
+      </blockquote>
+    </div>
+  </article>
+
+  <!-- INFORMACIÓN BÁSICA -->
+  <article class="panel" id="basica">
+    <h2>Información básica</h2>
+    <p>No hay una definición única, pero casi todos los lectores coinciden en algunos rasgos.</p>
+
+    <div class="dos">
+      <section>
+        <h3>Qué es un libro clásico</h3>
+        <p>Una obra que se sigue leyendo mucho después de su época y que otros autores citan, imitan o discuten. No es lo mismo que «antiguo»: lo que cuenta es que todavía tenga algo que decirle a quien lo abre hoy.</p>
+      </section>
+      <section>
+        <h3>Por qué leerlos</h3>
+        <p>Ayudan a entender referencias que aparecen en películas, series y conversaciones. Además, muestran cómo pensaba la gente de otras épocas y cuántas preocupaciones seguimos compartiendo.</p>
+      </section>
+      <section>
+        <h3>Cómo se agrupan</h3>
+        <p>Se suelen ordenar por época y tradición: literatura griega y latina, los siglos de oro, el siglo XIX con sus grandes novelas realistas y, ya en el siglo XX, los llamados clásicos modernos.</p>
+      </section>
+    </div>
+
+    <dl>
+      <dt>Edición anotada</dt>
+      <dd>Incluye notas al pie que explican palabras, costumbres y hechos históricos.</dd>
+      <dt>Traducción</dt>
+      <dd>Versión de una obra escrita en otro idioma. Una misma novela puede leerse muy distinto según quién la traduzca.</dd>
+      <dt>Dominio público</dt>
+      <dd>Obras cuyos derechos de autor ya vencieron. Muchas están disponibles gratis en bibliotecas digitales.</dd>
+    </dl>
+  </article>
+
+  <!-- OBRAS -->
+  <article class="panel" id="obras">
+    <h2>Obras para empezar</h2>
+    <p>Seis títulos muy distintos entre sí. Ninguno exige conocimientos previos.</p>
+
+    <div class="estante">
+      <div class="libro">
+        <h3>Don Quijote de la Mancha</h3>
+        <p class="autor">Miguel de Cervantes · 1605 y 1615</p>
+        <p>Un hidalgo que pierde el juicio leyendo novelas de caballerías y sale a vivir aventuras. Es divertido, triste y sorprendentemente moderno.</p>
+        <p class="nivel">Extensión: larga. Se puede leer por episodios.</p>
+      </div>
+      <div class="libro">
+        <h3>Orgullo y prejuicio</h3>
+        <p class="autor">Jane Austen · 1813</p>
+        <p>Elizabeth Bennet y el señor Darcy se malinterpretan una y otra vez. Humor fino, diálogos rápidos y crítica social.</p>
+        <p class="nivel">Extensión: media. Ritmo ágil.</p>
+      </div>
+      <div class="libro">
+        <h3>Crimen y castigo</h3>
+        <p class="autor">Fiódor Dostoyevski · 1866</p>
+        <p>Un estudiante pobre comete un asesinato y la culpa lo va devorando. Es una novela psicológica muy intensa.</p>
+        <p class="nivel">Extensión: larga. Nombres rusos que cuestan al principio.</p>
+      </div>
+      <div class="libro">
+        <h3>Frankenstein</h3>
+        <p class="autor">Mary Shelley · 1818</p>
+        <p>Un científico crea vida y rechaza lo que ha creado. Más que terror, es una reflexión sobre la responsabilidad y la soledad.</p>
+        <p class="nivel">Extensión: corta a media.</p>
+      </div>
+      <div class="libro">
+        <h3>La metamorfosis</h3>
+        <p class="autor">Franz Kafka · 1915</p>
+        <p>Gregor Samsa despierta convertido en un insecto enorme. Se lee en una tarde y deja mucho en qué pensar.</p>
+        <p class="nivel">Extensión: muy corta. Buena puerta de entrada.</p>
+      </div>
+      <div class="libro">
+        <h3>La Odisea</h3>
+        <p class="autor">Homero · poema de la Grecia antigua</p>
+        <p>El regreso de Ulises a casa después de la guerra de Troya, con monstruos, dioses y tentaciones por el camino.</p>
+        <p class="nivel">Extensión: media. Elige una traducción en prosa si el verso te frena.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- PROBLEMAS Y SOLUCIONES -->
+  <article class="panel" id="problemas">
+    <h2>Problemas y soluciones</h2>
+    <p>Casi todos los lectores se atascan en algún punto. Toca una pregunta para ver qué hacer.</p>
+
+    <div class="lista-problemas">
+      <details>
+        <summary>El lenguaje me parece antiguo y difícil</summary>
+        <div class="solucion">
+          <p><strong>Qué hacer:</strong> busca una edición moderna o con notas al pie y lee en voz alta los párrafos que no entiendas. El oído capta el ritmo de la frase mejor que los ojos.</p>
+          <p>Si una palabra se repite y no la conoces, anótala y sigue. El contexto suele aclararla unas páginas después.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>El libro es demasiado largo y me canso</summary>
+        <div class="solucion">
+          <p><strong>Qué hacer:</strong> fíjate una meta pequeña, como diez páginas al día o un capítulo cada noche. Las novelas del siglo XIX se publicaban por entregas y están pensadas para leerse a trozos.</p>
+          <p>También puedes empezar por una obra corta, como <em>La metamorfosis</em>, para ganar confianza.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Hay demasiados personajes y me pierdo</summary>
+        <div class="solucion">
+          <p><strong>Qué hacer:</strong> haz una lista en un papel o usa un marcador de página donde apuntes cada nombre con una pista breve. En las novelas rusas, recuerda que un mismo personaje puede aparecer con nombre, apodo y patronímico.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>No entiendo el contexto histórico</summary>
+        <div class="solucion">
+          <p><strong>Qué hacer:</strong> antes de empezar, lee un resumen de una página sobre la época y el autor. No hace falta más. Las notas de una buena edición suelen resolver el resto.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>No sé qué traducción o edición elegir</summary>
+        <div class="solucion">
+          <p><strong>Qué hacer:</strong> compara las primeras páginas de dos o tres ediciones en una librería o en una muestra gratuita y quédate con la que te resulte más natural. Mira que figure el nombre del traductor y que tenga prólogo o notas.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Empecé y no me engancha</summary>
+        <div class="solucion">
+          <p><strong>Qué hacer:</strong> dale unas cincuenta páginas. Si sigue sin funcionar, déjalo sin culpa y prueba con otro. Un clásico puede encajar mejor dentro de unos años.</p>
+        </div>
+      </details>
+    </div>
+  </article>
+
+</main>
+
+<footer>
+  <div class="pie">
+    <div>
+      <h4>Contacto</h4>
+      <p>Escríbeme si tienes dudas, sugerencias de lecturas o quieres colaborar.</p>
+      <ul>
+        <li>Nombre: <strong>Tu nombre aquí</strong></li>
+        <li>Correo: <a href="mailto:tucorreo@ejemplo.com">tucorreo@ejemplo.com</a></li>
+        <li>Teléfono: <a href="tel:+50300000000">+503 0000 0000</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Ubicación</h4>
+      <ul>
+        <li>Tu ciudad, tu país</li>
+        <li>Atención: lunes a viernes</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Redes</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Goodreads</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="derechos">© 2026 El Estante Clásico. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>
